@@ -25,11 +25,20 @@ export class TransactionsService {
 
         client.emit(TRANSACTION_CHANNEL, "Replicating Master Trade...");
 
-        const results = await this.utils.performTransaction({
+        let results = await this.utils.performTransaction({
             id: this.connectionId,
             ...transactionData
         });
 
+        if (results.code === "INVALID_TOKEN") {
+            this.connectionId = await this.utils.getTransactionConnectionId();
+            transactionData = await this.utils.getTransactionData();
+            results = await this.utils.performTransaction({
+                id: this.connectionId,
+                ...transactionData
+            });
+        }
+        
         if (results.code === "TOO_MANY_ORDERS") {
             client.emit(TRANSACTION_CHANNEL, "Too many open orders. Please try again later");
         } else {
