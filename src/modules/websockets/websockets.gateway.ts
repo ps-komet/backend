@@ -4,7 +4,7 @@ import { TRANSACTION_LISTENER } from 'src/common/constants';
 import { TransactionsService } from '../transactions/transactions.service';
 
 
-@WebSocketGateway(81, { cors: { origin: "*", allowedHeaders: "*" } })
+@WebSocketGateway(4331, { cors: { origin: "*", allowedHeaders: "*" } })
 export class WebsocketsGateway {
   constructor(private readonly transactionService: TransactionsService) { }
 
